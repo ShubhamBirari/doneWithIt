@@ -1,19 +1,8 @@
-import { StyleSheet, SafeAreaView, StatusBar, Platform } from 'react-native';
-import colors from './app/config/colors';
-import WelcomeScreen from './app/screens/WelcomeScreen';
-import Card from './app/components/Card';
+import { StyleSheet, StatusBar, Platform } from 'react-native';
+import MessagesScreen from './app/screens/MessagesScreen';
 
 export default function App() {
-	return (
-		<SafeAreaView style={styles.container}>
-			{/* <WelcomeScreen /> */}
-			<Card
-				title='Red jacket for sale'
-				subtitle={'$1.00'}
-				image={require('./assets/jacket.jpg')}
-			/>
-		</SafeAreaView>
-	);
+	return <MessagesScreen />;
 }
 
 const styles = StyleSheet.create({
