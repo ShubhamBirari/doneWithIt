@@ -16,8 +16,6 @@ const Card = ({ title, subtitle, image }) => {
 
 const styles = StyleSheet.create({
 	root: {
-		padding: 24,
-		backgroundColor: '#f8f4f4',
 		marginBottom: 16,
 	},
 	image: {
@@ -29,6 +27,8 @@ const styles = StyleSheet.create({
 	detailsContainer: {
 		padding: 12,
 		backgroundColor: colors.white,
+		borderBottomLeftRadius: 16,
+		borderBottomRightRadius: 16,
 	},
 	title: {
 		fontSize: 20,
