@@ -9,7 +9,7 @@ function AppTextInput({ icon, ...props }) {
 	return (
 		<View style={styles.container}>
 			{icon && <Icon name={icon} size={40} style={styles.icon} />}
-			<TextInput {...props} style={defaultStyles.text} />
+			<TextInput {...props} style={[defaultStyles.text, styles.text]} />
 		</View>
 	);
 }
@@ -21,9 +21,13 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.light,
 		padding: 8,
 		marginVertical: 10,
+		borderRadius: 100,
 	},
 	icon: {
 		marginRight: 10,
+	},
+	text: {
+		flex: 1,
 	},
 });
 
