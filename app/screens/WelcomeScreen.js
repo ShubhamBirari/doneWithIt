@@ -23,7 +23,11 @@ const WelcomeScreen = ({ navigation }) => {
 					title={'Login'}
 					onPress={() => navigation.navigate(routes.LOGIN)}
 				/>
-				<AppButton color='secondary' title='Register' />
+				<AppButton
+					color='secondary'
+					title='Register'
+					onPress={() => navigation.navigate(routes.REGISTER)}
+				/>
 			</View>
 		</ImageBackground>
 	);

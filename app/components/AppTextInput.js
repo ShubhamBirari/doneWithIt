@@ -5,10 +5,17 @@ import colors from '../config/colors';
 import defaultStyles from '../config/defaultStyles';
 import Icon from './Icon';
 
-function AppTextInput({ icon, ...props }) {
+function AppTextInput({ icon, width = '100%', ...props }) {
 	return (
-		<View style={styles.container}>
-			{icon && <Icon name={icon} size={40} style={styles.icon} />}
+		<View style={[styles.container, { width }]}>
+			{icon && (
+				<Icon
+					name={icon}
+					size={40}
+					style={styles.icon}
+					iconColor={colors.medium}
+				/>
+			)}
 			<TextInput {...props} style={[defaultStyles.text, styles.text]} />
 		</View>
 	);
@@ -16,12 +23,11 @@ function AppTextInput({ icon, ...props }) {
 
 const styles = StyleSheet.create({
 	container: {
-		width: '100%',
 		flexDirection: 'row',
 		backgroundColor: colors.light,
-		padding: 8,
+		padding: 10,
 		marginVertical: 10,
-		borderRadius: 100,
+		borderRadius: 25,
 	},
 	icon: {
 		marginRight: 10,

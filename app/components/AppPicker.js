@@ -13,15 +13,28 @@ import Icon from './Icon';
 import AppText from './AppText';
 import PickerItem from './PickerItem';
 
-function AppPicker({ icon, options, selectedItem, onSelectItem }) {
+function AppPicker({
+	icon,
+	options,
+	numberOfColumns = 1,
+	onSelectItem,
+	PickerItemComponent = PickerItem,
+	placeholder,
+	selectedItem,
+	width = '100%',
+}) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
 		<>
 			<TouchableWithoutFeedback onPress={() => setIsOpen(true)}>
-				<View style={styles.container}>
+				<View style={[styles.container, { width }]}>
 					{icon && <Icon name={icon} size={40} style={styles.icon} />}
-					<AppText style={[styles.text]}>{selectedItem}</AppText>
+					{selectedItem ? (
+						<AppText style={styles.text}>{selectedItem.label}</AppText>
+					) : (
+						<AppText style={styles.placeholder}>{placeholder}</AppText>
+					)}
 					<Icon name='chevron-down' />
 				</View>
 			</TouchableWithoutFeedback>
@@ -33,13 +46,15 @@ function AppPicker({ icon, options, selectedItem, onSelectItem }) {
 				/>
 				<FlatList
 					data={options}
-					keyExtractor={(item) => item.name.toString()}
+					keyExtractor={(item) => item.value.toString()}
+					numColumns={numberOfColumns}
 					renderItem={({ item }) => (
-						<PickerItem
-							label={item.name}
+						<PickerItemComponent
+							item={item}
+							label={item.label}
 							onPress={() => {
 								setIsOpen(false);
-								onSelectItem(item.name);
+								onSelectItem(item);
 							}}
 						/>
 					)}
@@ -51,10 +66,10 @@ function AppPicker({ icon, options, selectedItem, onSelectItem }) {
 
 const styles = StyleSheet.create({
 	container: {
-		width: '100%',
-		flexDirection: 'row',
 		backgroundColor: colors.light,
-		padding: 8,
+		borderRadius: 25,
+		flexDirection: 'row',
+		padding: 15,
 		marginVertical: 10,
 	},
 	text: {
@@ -63,6 +78,10 @@ const styles = StyleSheet.create({
 	},
 	icon: {
 		marginRight: 10,
+	},
+	placeholder: {
+		color: colors.medium,
+		flex: 1,
 	},
 });
 
