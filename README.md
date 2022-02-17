@@ -1,2 +1,2 @@
 # doneWithIt
-Sample repo created while learning React Native with the help of Mosh Hamedani
+Sample repo created to learn React Native with the help of Mosh Hamedani
