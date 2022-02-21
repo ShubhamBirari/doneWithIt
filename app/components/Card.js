@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 import colors from '../config/colors';
 
-const Card = ({ title, subtitle, image, onPress }) => {
+const Card = ({ title, subtitle, imageUrl, onPress }) => {
 	return (
 		<TouchableWithoutFeedback onPress={onPress}>
 			<View style={styles.root}>
-				<Image source={image} resizeMode='cover' style={styles.image} />
+				<Image source={imageUrl} resizeMode='cover' style={styles.image} />
 				<View style={styles.detailsContainer}>
 					<Text style={styles.title}>{title}</Text>
 					<Text style={styles.subtitle}>{subtitle}</Text>
