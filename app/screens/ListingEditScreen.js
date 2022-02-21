@@ -2,19 +2,27 @@ import { Formik } from 'formik';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import * as Yup from 'yup';
+import * as Progress from 'react-native-progress';
+
 import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
-
 import CategoryPickerItem from '../components/CategoryPickerItem';
 import ErrorMessage from '../components/ErrorMessage';
+import FormImagePicker from '../components/FormImagePicker';
 import Screen from '../components/Screen';
+import useLocation from '../hooks/useLocation';
 import AppPicker from './../components/AppPicker';
+
+import listingsApi from '../api/listings';
+import useApi from '../hooks/useApi';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 const validationSchema = Yup.object().shape({
 	title: Yup.string().required().min(1).label('Title'),
 	price: Yup.number().required().min(1).max(10000).label('Price'),
 	description: Yup.string().label('Description'),
 	category: Yup.object().required().nullable().label('Category'),
+	images: Yup.array().min(1, 'Please add at least one image'),
 });
 
 const categories = [
@@ -75,6 +83,34 @@ const categories = [
 ];
 
 function ListingEditScreen() {
+	const location = useLocation();
+
+	const {
+		data: responseData,
+		error,
+		loading,
+		request: postListings,
+	} = useApi(listingsApi.postListing);
+
+	const submitListing = (values) => {
+		const data = new FormData();
+		data.append('title', values.title);
+		data.append('price', values.price);
+		data.append('description', values.description);
+		data.append('categoryId', values.category.value);
+		data.append('location', JSON.stringify(location));
+		values.images.forEach((temp, index) => {
+			data.append('images', {
+				name: 'image' + index,
+				type: 'image/jpeg',
+				uri: temp,
+			});
+		});
+
+		postListings();
+		console.log(error, responseData);
+	};
+
 	return (
 		<Screen style={styles.container}>
 			<Formik
@@ -83,8 +119,9 @@ function ListingEditScreen() {
 					price: '',
 					description: '',
 					category: null,
+					images: [],
 				}}
-				onSubmit={(values) => console.log(values)}
+				onSubmit={(values) => submitListing(values)}
 				validationSchema={validationSchema}
 			>
 				{({
@@ -97,6 +134,7 @@ function ListingEditScreen() {
 					values,
 				}) => (
 					<>
+						<FormImagePicker name='images' />
 						<AppTextInput
 							maxLength={255}
 							name='title'
@@ -141,7 +179,11 @@ function ListingEditScreen() {
 							error={errors.description}
 							visible={touched.description}
 						/>
-						<AppButton title='Post' onPress={handleSubmit} />
+						{loading ? (
+							<ActivityIndicator visible={loading} />
+						) : (
+							<AppButton title='Post' onPress={handleSubmit} />
+						)}
 					</>
 				)}
 			</Formik>
@@ -154,4 +196,5 @@ const styles = StyleSheet.create({
 		padding: 10,
 	},
 });
+
 export default ListingEditScreen;
