@@ -2,7 +2,6 @@ import { Formik } from 'formik';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import * as Yup from 'yup';
-import * as Progress from 'react-native-progress';
 
 import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';

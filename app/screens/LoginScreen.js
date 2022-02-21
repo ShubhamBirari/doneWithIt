@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import * as Yup from 'yup';
 import { Image, StyleSheet, Text } from 'react-native';
 import { Formik } from 'formik';
@@ -8,11 +8,29 @@ import AppTextInput from '../components/AppTextInput';
 import Screen from '../components/Screen';
 import ErrorMessage from '../components/ErrorMessage';
 
+import authApi from './../api/auth';
+import jwtDecode from 'jwt-decode';
+import AuthContext from './../auth/context';
+import storage from '../auth/storage';
+
 function LoginScreen() {
+	const [loginFailed, setLoginFailed] = useState(false);
+	const { setUser } = useContext(AuthContext);
+
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email().required().label('Email'),
 		password: Yup.string().min(4).required().label('Password'),
 	});
+
+	const onSubmit = async ({ email, password }) => {
+		const response = await authApi.login(email, password);
+		if (!response.ok) return setLoginFailed(true);
+
+		setLoginFailed(false);
+		const user = jwtDecode(response.data);
+		setUser(user);
+		storage.setToken(result.data);
+	};
 
 	return (
 		<Screen style={styles.screen}>
@@ -21,12 +39,13 @@ function LoginScreen() {
 				resizeMode='contain'
 				style={styles.logo}
 			/>
+			<ErrorMessage error={'Invalid email or password'} visible={loginFailed} />
 			<Formik
 				initialValues={{
 					email: '',
 					password: '',
 				}}
-				onSubmit={(values) => console.log(values)}
+				onSubmit={onSubmit}
 				validationSchema={validationSchema}
 			>
 				{({ handleChange, handleSubmit, errors, setFieldTouched, touched }) => (
